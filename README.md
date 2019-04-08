@@ -1,2 +1,4 @@
 # bendybot
-Discord bot for the boyz.
+
+# Discord Bot
+This is it!
