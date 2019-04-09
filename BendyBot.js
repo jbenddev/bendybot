@@ -16,12 +16,12 @@ client.on('ready', () => {
     })
 
     //Set Activity
-    client.user.setActivity("You Scrubs.", {type: "WATCHING"})
+    client.user.setActivity("you scrubs.", {type: "WATCHING"})
 
 
     //Channel messaging
-    var generalChannel = client.channels.get("386111660403851266") // Replace with known channel ID
-    generalChannel.send("Sup, bitches!")  
+    //var generalChannel = client.channels.get("386111660403851266") // Replace with known channel ID
+    //generalChannel.send("Sup, bitches!")  
 })
 /*
 //Message based events
@@ -60,6 +60,8 @@ function processCommand(receivedMessage) {
         multiplyCommand(arguments, receivedMessage)
     } else if (primaryCommand == "commands") {
         commandsCommand(arguments, receivedMessage);
+    } else if (primaryCommand == "random") {
+        randomCommand(arguments, receivedMessage);
     } else {
         receivedMessage.channel.send("I don't understand the command. Try '!help'")
     }
@@ -87,7 +89,28 @@ function commandsCommand(arguments, receivedMessage) {
     } else {
         receivedMessage.channel.send("The current commands are as follows: \
             \n !commands \
-            \n !multiply \ ");
+            \n !multiply \
+            \n !random");
+    }
+}
+
+function randomCommand(arguments, receivedMessage) {
+    if (arguments.length > 1) {
+        if (arguments.length == 2 && /^\d+$/.test(arguments[0]) && /^\d+$/.test(arguments[1])) { // Handle number range (min, max) 
+            arguments.sort((a, b) => a - b); // sort the numbers
+            min = Math.ceil(arguments[0]); // low value
+            max = Math.floor(arguments[1]); // high value
+            randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            receivedMessage.channel.send(`Random number between ${min} and ${max}: \n ${randomNum}`); 
+        } else { // Select from one of options
+            min = Math.ceil(0); // low value
+            max = Math.floor(arguments.length -1); // high value
+            randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            answer = arguments[randomNum];
+            receivedMessage.channel.send(`Between those options its: ${answer}`); 
+        }
+    } else {
+        receivedMessage.channel.send("!random requires either a min and a max number range (!random 1 10) or a list of options to choose between (!random chalk cheese dumplings).");
     }
 }
 
